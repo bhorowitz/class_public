@@ -186,20 +186,51 @@ int perturb_init(
 #endif
 
                 /* RAY FLAG */
+    int index_q_max = pba->q_size_ncdm[pba->N_ncdm - 1];
+    int index_l_max = ppr->l_max_ncdm;
+    char kernel_file_name[100];
+    sprintf(kernel_file_name, "./collision_kernel/kerneltable_%d_%d.dat", index_q_max, index_l_max);
+    FILE *fp = fopen(kernel_file_name, "rb");
+    
+    if (fp) {
+        printf("%s opened.\n", kernel_file_name);
+
+        for(index_q = 0; index_q < pba->q_size_ncdm[pba->N_ncdm - 1]; index_q++){
+            for (index_qp = 0; index_qp < pba->q_size_ncdm[pba->N_ncdm - 1]; index_qp++) {
+                for (index_l = 0; index_l < ppr->l_max_ncdm ; index_l++) {
+                    double kernelElement;
+                    fscanf(fp, "%lf,", &kernelElement);
+                    ppt->K_m_l_matrix[index_q][index_qp][index_l] = kernelElement;
+                    //printf("K_m_l_matrix is %E \n", ppt->K_m_l_matrix[index_q][index_qp][index_l]);
+                }
+            }
+            printf("Finished reading interaction kernels (K_m_l):  %i / %i \n", index_q+1,pba->q_size_ncdm[pba->N_ncdm - 1]);
+        }
+        
+        
+    }
+    if (!fp) {
+        printf("%s created.\n", kernel_file_name);
+        fp = fopen(kernel_file_name, "ab+");
+    
        for(index_q = 0; index_q < pba->q_size_ncdm[pba->N_ncdm - 1]; index_q++){
             for (index_qp = 0; index_qp < pba->q_size_ncdm[pba->N_ncdm - 1]; index_qp++) {
                 for (index_l = 0; index_l < ppr->l_max_ncdm ; index_l++) {
                     double qToKelvin= 2*_PI_/13797.909625*7.42095*pow(10,-26); // q is in the units of 2pi/r_a(tau_rec) and 7.42095*pow(10,-26) converts 1/Mpc into Kelvin.
+                    //printf("In Loop\n");
                     ppt->K_m_l_matrix[index_q][index_qp][index_l] = K_m_l(qToKelvin*pba->q_ncdm[pba->N_ncdm - 1][index_q],qToKelvin*pba->q_ncdm[pba->N_ncdm - 1][index_qp], index_l) ;
                     //printf("q = %f and qp = %f and l=%i \n", pba->q_ncdm[pba->N_ncdm - 1][index_q], pba->q_ncdm[pba->N_ncdm - 1][index_qp],index_l);
                     //printf("K_m_l_matrix is %E \n", ppt->K_m_l_matrix[index_q][index_qp][index_l]);
+                    
+                    fprintf(fp, "%E, ", ppt->K_m_l_matrix[index_q][index_qp][index_l]);
                 }
             }
             printf("Finished precomputing interaction kernels (K_m_l):  %i / %i \n", index_q+1,pba->q_size_ncdm[pba->N_ncdm - 1]);
         }
-        
-
-  /** - perform preliminary checks */
+    }
+    fclose(fp);
+    printf("File closed. \n");
+    /** - perform preliminary checks */
 
   if (ppt->has_perturbations == _FALSE_) {
     if (ppt->perturbations_verbose > 0)
@@ -2506,7 +2537,7 @@ int perturb_solve(
 }
 
 int perturb_prepare_output(struct background * pba,
-			   struct perturbs * ppt){
+         struct perturbs * ppt){
 
   int n_ncdm;
   char tmp[40];
