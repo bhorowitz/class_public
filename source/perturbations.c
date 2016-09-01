@@ -186,6 +186,7 @@ int perturb_init(
 #endif
 
                 /* RAY FLAG */
+  if (pba->has_ncdm == _TRUE_) {
     int index_q_max = pba->q_size_ncdm[pba->N_ncdm - 1];
     int index_l_max = ppr->l_max_ncdm;
     char kernel_file_name[100];
@@ -230,6 +231,10 @@ int perturb_init(
     }
     fclose(fp);
     printf("File closed. \n");
+  }
+  else{
+    printf("No NCDM\n");
+  }
     /** - perform preliminary checks */
 
   if (ppt->has_perturbations == _FALSE_) {
