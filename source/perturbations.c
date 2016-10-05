@@ -227,11 +227,11 @@ int perturb_init(
         }
     }
     fclose(fp);
-<<<<<<< HEAD
-}
-=======
 
->>>>>>> 5613c2c39e9f1734a6cccec31cc503f761970272
+}
+
+
+
   /** - perform preliminary checks */
 
   if (ppt->has_perturbations == _FALSE_) {
@@ -7464,11 +7464,10 @@ int perturb_derivs(double tau,
       /** - ----> second case: use exact equation (Boltzmann hierarchy on momentum grid) */
 
      else {
-<<<<<<< HEAD
          param = 6.668*pow(10,-24)/pow(a,4);/*(pba->sig_ncdm);*/
-=======
+
          param = pow(10,-24)/pow(a,4);/*(pba->sig_ncdm);*/
->>>>>>> 5613c2c39e9f1734a6cccec31cc503f761970272
+
 
       //printf("a = %E\n", a);
         /** - -----> loop over species */
