@@ -7466,7 +7466,6 @@ int perturb_derivs(double tau,
      else {
          param = 6.668*pow(10,-24)/pow(a,4);/*(pba->sig_ncdm);*/
 
-         param = pow(10,-24)/pow(a,4);/*(pba->sig_ncdm);*/
 
 
       //printf("a = %E\n", a);
