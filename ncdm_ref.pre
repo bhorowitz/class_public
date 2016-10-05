@@ -1,1 +1,9 @@
-l_max_ncdm = 10
+l_max_ncdm = 50
+
+tol_ncdm = 2.e-06
+tol_ncdm_bg = 2.e-06 #(This one probably doesn't matter)
+
+tol_ncdm_synchronous = 2.e-06
+tol_ncdm_newtonian = 2.e-06
+#tol_perturb_integration=1.e-1
+#perturb_integration_stepsize=0.0005
