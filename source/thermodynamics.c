@@ -1091,6 +1091,7 @@ int thermodynamics_helium_from_bbn(
 	      -pvecback[pba->index_bg_rho_g])
     /(7./8.*pow(4./11.,4./3.)*pvecback[pba->index_bg_rho_g]);
 
+  printf("Neff=%.4f,rho_crit/rho_g=%.4f",Neff_bbn,pvecback[pba->index_bg_rho_crit]/pvecback[pba->index_bg_rho_g]);
   free(pvecback);
 
   //  printf("Neff early = %g, Neff at bbn: %g\n",pba->Neff,Neff_bbn);
