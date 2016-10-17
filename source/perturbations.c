@@ -7437,7 +7437,7 @@ int perturb_derivs(double tau,
           double cplng_ncdm = pba->sig_ncdm[n_ncdm];
           /** - -----> loop over momentum */
           //printf(" q_size= %i, \n ", pv->q_size_ncdm[n_ncdm]); 
-
+          if(n_ncdm==0){
           for (index_q=0; index_q < pv->q_size_ncdm[n_ncdm]; index_q++) {
 
             /** - -----> define intermediate quantities */
@@ -7480,6 +7480,50 @@ int perturb_derivs(double tau,
 
             idx += (pv->l_max_ncdm[n_ncdm]+1);
           }
+        }
+
+          if(n_ncdm==1){
+          for (index_q=0; index_q < pv->q_size_ncdm[n_ncdm]; index_q++) {
+
+/** - -----> define intermediate quantities */
+
+            dlnf0_dlnq = pba->dlnf0_dlnq_ncdm[n_ncdm][index_q];
+            q = pba->q_ncdm[n_ncdm][index_q];
+            epsilon = sqrt(q*q+a2*pba->M_ncdm[n_ncdm]*pba->M_ncdm[n_ncdm]);
+            qk_div_epsilon = k*q/epsilon;
+
+            /** - -----> ncdm density for given momentum bin */
+
+            dy[idx] = -qk_div_epsilon*y[idx+1]+metric_continuity*dlnf0_dlnq/3.;
+
+            /** - -----> ncdm velocity for given momentum bin */
+
+            dy[idx+1] = qk_div_epsilon/3.0*(y[idx] - 2*s_l[2]*y[idx+2])
+              -epsilon*metric_euler/(3*q*k)*dlnf0_dlnq;
+
+            /** - -----> ncdm shear for given momentum bin */
+
+            dy[idx+2] = qk_div_epsilon/5.0*(2*s_l[2]*y[idx+1]-3.*s_l[3]*y[idx+3])
+              -s_l[2]*metric_shear*2./15.*dlnf0_dlnq;
+
+            /** - -----> ncdm l>3 for given momentum bin */
+
+            for(l=3; l<pv->l_max_ncdm[n_ncdm]; l++){
+              dy[idx+l] = qk_div_epsilon/(2.*l+1.0)*(l*s_l[l]*y[idx+(l-1)]-(l+1.)*s_l[l+1]*y[idx+(l+1)]);
+            }
+
+            /** - -----> ncdm lmax for given momentum bin (truncation as in Ma and Bertschinger)
+                but with curvature taken into account a la arXiv:1305.3261 */
+
+            dy[idx+l] = qk_div_epsilon*y[idx+l-1]-(1.+l)*k*cotKgen*y[idx+l];
+
+            /** - -----> jump to next momentum bin or species */
+
+            idx += (pv->l_max_ncdm[n_ncdm]+1);
+
+          }
+        }
+
         }
 
       }
