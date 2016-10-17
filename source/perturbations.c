@@ -7429,7 +7429,7 @@ int perturb_derivs(double tau,
       //printf("a = %E\n", a);
         /** - -----> loop over species */
         /*printf("Loopin'\n");*/
-        for (n_ncdm=0; n_ncdm<pv->N_ncdm; n_ncdm++) {
+        for (n_ncdm=0; n_ncdm<pv->N_ncdm; n_ncdm++) { //Strongly Coupled
           T_v = pba->T_ncdm[n_ncdm]*2.725; /*stod(pba->T_ncdm);*/
           qToKelvin = T_v;
           ksi = pba->ksi_ncdm[n_ncdm];
@@ -7449,8 +7449,6 @@ int perturb_derivs(double tau,
             qk_div_epsilon = k*q/epsilon;
             /*printf(" q= %f, F0 = %f, a = %f, \n ", q, y[idx],a); */
             /** - -----> ncdm density for given momentum bin */
-
-            /** - -----> INTEGRAL 1 */
 
 
             dy[idx] = -qk_div_epsilon*y[idx+1]+metric_continuity*dlnf0_dlnq/3.; /*BEN FLAG */
@@ -7482,7 +7480,7 @@ int perturb_derivs(double tau,
           }
         }
 
-          if(n_ncdm==1){
+          if(n_ncdm==1){ // None Coupled
           for (index_q=0; index_q < pv->q_size_ncdm[n_ncdm]; index_q++) {
 
 /** - -----> define intermediate quantities */
