@@ -7465,7 +7465,7 @@ int perturb_derivs(double tau,
       /** - ----> second case: use exact equation (Boltzmann hierarchy on momentum grid) */
 
      else {
-         param = 6.668*pow(10,-24)/pow(a,4);/*(pba->sig_ncdm);*/
+         param = 0.018*a;//6.668*pow(10,-24)/pow(a,4);/*(pba->sig_ncdm);*/
 
 
 
